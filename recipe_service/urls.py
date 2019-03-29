@@ -14,13 +14,31 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 
+
 from django.contrib import admin
-from recipes import views
+from django.contrib.auth.models import User
+from recipes import views as recipe_views
 from django.urls import include, path
+from recipes.views import UserViewSet, RecipeViewSet
+from rest_framework.authtoken import views
+from rest_framework.routers import DefaultRouter
+from django.conf.urls import url
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-	path('users/', views.UserView.as_view()),
-	path('recipes/', views.RecipeView.as_view()),
+	path('users/', recipe_views.UserView.as_view()),
+	path('recipes/', recipe_views.RecipeView.as_view()),
 
 ]
+
+urlpatterns += [
+	url(r'^upload/(?P<pk>\d+)/$)', recipe_views.PhotoUpload),
+    url(r'^api-token-auth/', views.obtain_auth_token)
+]
+
+router = DefaultRouter()
+router.register(r'users', UserViewSet, basename='user')
+router.register(r'recipes', RecipeViewSet, basename='recipe')
+urlpatterns = router.urls
+

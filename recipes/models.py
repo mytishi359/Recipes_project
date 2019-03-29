@@ -18,7 +18,7 @@ class Customuser(models.Model):
 class Recipe(models.Model):
 	name = models.CharField(max_length=20)
 	description = models.CharField(max_length=200)
-	photo = models.ImageField()
+	photo = models.ImageField(null=True)
 	author = models.ForeignKey(Customuser,on_delete=models.CASCADE)
 	likes = models.IntegerField()
 	hashtags = fields.ArrayField(
